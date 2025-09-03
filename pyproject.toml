@@ -7,6 +7,7 @@ name = "codemood"
 version = "0.0.1"
 description = "A fun Code Mood Analyzer that assigns 'moods' to code snippets using AI"
 readme = "README.md"
+requires-python = ">=3.8"
 license = { file = "LICENSE" }
 authors = [
     { name = "Omkar Palika", email = "palikaomkar.22.cse@anits.edu.in" }

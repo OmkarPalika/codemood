@@ -14,6 +14,7 @@ try:
 except ImportError:
     HFInferenceClient = None  # type: ignore
 
+
 class CodeMoodAnalyzer:
     def __init__(
         self,
