@@ -3,15 +3,15 @@ import warnings
 import re
 from typing import Any, Dict, Optional, List, cast, TYPE_CHECKING
 
-if TYPE_CHECKING:
-    # These are ONLY for type checking; at runtime, we rely on stubs/import fallbacks
-    from transformers.pipelines.base import Pipeline
-    from huggingface_hub import InferenceClient
-
 try:
     from transformers import pipeline
+    from transformers.pipelines.base import Pipeline  # type: ignore
 except ImportError:
     pipeline = None  # type: ignore
+    Pipeline = None  # type: ignore
+
+if TYPE_CHECKING:
+    from huggingface_hub import InferenceClient
 
 try:
     from huggingface_hub import InferenceClient as HFInferenceClient
@@ -20,27 +20,36 @@ except ImportError:
 
 
 class CodeMoodAnalyzer:
-    def __init__(self, model: str = "distilbert/distilbert-base-uncased-finetuned-sst-2-english"):
+    def __init__(
+        self,
+        model: str = (
+            "distilbert/distilbert-base-uncased-finetuned-sst-2-english"
+        ),
+    ):
         self.model = model
-        self.local_model: Optional["Pipeline"] = None
-        self.client: Optional["InferenceClient"] = None
+        self.local_model: Any = None
+        self.client: Any = None
 
         # Step 1: Try local transformers pipeline
         if pipeline:
             try:
-                self.local_model = pipeline("sentiment-analysis", model=self.model)  # type: ignore
+                self.local_model = pipeline(  # type: ignore
+                    "sentiment-analysis", model=self.model  # type: ignore
+                )
+
             except Exception as e:
                 warnings.warn(f"Local pipeline failed: {e}")
                 self.local_model = None
 
         # Step 2: Prepare HuggingFace client (fallback)
         if HFInferenceClient:
-            token = os.getenv("HF_TOKEN", "YOUR_DEFAULT_HF_TOKEN")
-            try:
-                self.client = HFInferenceClient(api_key=token)  # type: ignore
-            except Exception as e:
-                warnings.warn(f"HuggingFace client init failed: {e}")
-                self.client = None
+            token = os.getenv("HF_TOKEN")
+            if token:
+                try:
+                    self.client = HFInferenceClient(api_key=token)  # type: ignore
+                except Exception as e:
+                    warnings.warn(f"HuggingFace client init failed: {e}")
+                    self.client = None
 
     def _analyze_single(self, text: str) -> Dict[str, Any]:
         """Run sentiment on a single string using available backend."""
@@ -49,13 +58,19 @@ class CodeMoodAnalyzer:
                 return self.local_model(text)[0]  # type: ignore[index]
             except Exception:
                 pass
+
         if self.client:
             try:
-                result = self.client.text_classification(text, model=self.model)  # type: ignore
+                result = self.client.text_classification(  # type: ignore
+                    text, model=self.model
+                )
                 result = cast(List[Dict[str, Any]], result)
-                return result[0] if isinstance(result, list) and result else {"label": "NEUTRAL", "score": 0.5}
+                if isinstance(result, list) and result:
+                    return result[0]
+                return {"label": "NEUTRAL", "score": 0.5}
             except Exception:
                 pass
+
         return {"label": "NEUTRAL", "score": 0.5}
 
     def analyze(self, code: str) -> Dict[str, Any]:
@@ -77,9 +92,15 @@ class CodeMoodAnalyzer:
                 negative_triggers.append(tok)
 
         if label == "POSITIVE" and positive_triggers:
-            reason = f"Model got happy because it saw {', '.join(set(positive_triggers))} 🎉"
+            reason = (
+                f"Model got happy because it saw "
+                f"{', '.join(set(positive_triggers))} 🎉"
+            )
         elif label == "NEGATIVE" and negative_triggers:
-            reason = f"Model got sad because it saw {', '.join(set(negative_triggers))} 😢"
+            reason = (
+                f"Model got sad because it saw "
+                f"{', '.join(set(negative_triggers))} 😢"
+            )
         else:
             reason = "Model is confused but still picked a mood 🤷"
 
