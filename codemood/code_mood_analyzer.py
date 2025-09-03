@@ -1,22 +1,18 @@
 import os
 import warnings
 import re
-from typing import Any, Dict, List, cast, TYPE_CHECKING
+from typing import Any, Dict, List, cast
 
 try:
     from transformers import pipeline
-    from transformers.pipelines.base import Pipeline  # type: ignore
 except ImportError:
     pipeline = None  # type: ignore
     Pipeline = None  # type: ignore
-
-
 
 try:
     from huggingface_hub import InferenceClient as HFInferenceClient
 except ImportError:
     HFInferenceClient = None  # type: ignore
-
 
 class CodeMoodAnalyzer:
     def __init__(
