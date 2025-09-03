@@ -1,67 +1,70 @@
 import os
 import warnings
 import re
+from typing import Any, Dict, Optional, List, cast, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    # These are ONLY for type checking; at runtime, we rely on stubs/import fallbacks
+    from transformers.pipelines.base import Pipeline
+    from huggingface_hub import InferenceClient
 
 try:
     from transformers import pipeline
-    _has_transformers = True
 except ImportError:
-    _has_transformers = False
+    pipeline = None  # type: ignore
 
 try:
-    from huggingface_hub import InferenceClient
-    _has_hf = True
+    from huggingface_hub import InferenceClient as HFInferenceClient
 except ImportError:
-    _has_hf = False
+    HFInferenceClient = None  # type: ignore
 
 
 class CodeMoodAnalyzer:
-    def __init__(self, model="distilbert/distilbert-base-uncased-finetuned-sst-2-english"):
+    def __init__(self, model: str = "distilbert/distilbert-base-uncased-finetuned-sst-2-english"):
         self.model = model
-        self.local_model = None
+        self.local_model: Optional["Pipeline"] = None
+        self.client: Optional["InferenceClient"] = None
 
         # Step 1: Try local transformers pipeline
-        if _has_transformers:
+        if pipeline:
             try:
-                self.local_model = pipeline("sentiment-analysis", model=self.model)
+                self.local_model = pipeline("sentiment-analysis", model=self.model)  # type: ignore
             except Exception as e:
                 warnings.warn(f"Local pipeline failed: {e}")
                 self.local_model = None
 
         # Step 2: Prepare HuggingFace client (fallback)
-        if _has_hf:
-            token = os.getenv("HF_TOKEN", "YOUR_DEFAULT_HF_TOKEN")  # replace with your token if desired
+        if HFInferenceClient:
+            token = os.getenv("HF_TOKEN", "YOUR_DEFAULT_HF_TOKEN")
             try:
-                self.client = InferenceClient(api_key=token)
+                self.client = HFInferenceClient(api_key=token)  # type: ignore
             except Exception as e:
                 warnings.warn(f"HuggingFace client init failed: {e}")
                 self.client = None
-        else:
-            self.client = None
 
-    def _analyze_single(self, text: str):
+    def _analyze_single(self, text: str) -> Dict[str, Any]:
         """Run sentiment on a single string using available backend."""
         if self.local_model:
             try:
-                return self.local_model(text)[0]
+                return self.local_model(text)[0]  # type: ignore[index]
             except Exception:
                 pass
         if self.client:
             try:
-                result = self.client.text_classification(text, model=self.model)
-                return result[0] if isinstance(result, list) else result
+                result = self.client.text_classification(text, model=self.model)  # type: ignore
+                result = cast(List[Dict[str, Any]], result)
+                return result[0] if isinstance(result, list) and result else {"label": "NEUTRAL", "score": 0.5}
             except Exception:
                 pass
         return {"label": "NEUTRAL", "score": 0.5}
 
-    def analyze(self, code: str):
+    def analyze(self, code: str) -> Dict[str, Any]:
         """Analyze mood of given code snippet with funny explanation."""
-        # 1. Full snippet sentiment
         main_result = self._analyze_single(code)
         label = main_result["label"]
         score = main_result["score"]
 
-        # 2. Token-level scan
+        # Token-level scan
         tokens = re.split(r"[^a-zA-Z0-9_]+", code)
         tokens = [t for t in tokens if t]
 
@@ -73,7 +76,6 @@ class CodeMoodAnalyzer:
             elif r["label"] == "NEGATIVE" and r["score"] > 0.7:
                 negative_triggers.append(tok)
 
-        # 3. Funny explanation
         if label == "POSITIVE" and positive_triggers:
             reason = f"Model got happy because it saw {', '.join(set(positive_triggers))} 🎉"
         elif label == "NEGATIVE" and negative_triggers:
@@ -81,8 +83,8 @@ class CodeMoodAnalyzer:
         else:
             reason = "Model is confused but still picked a mood 🤷"
 
-        return {
-            "label": label,
-            "score": score,
-            "reason": reason
-        }
+        return {"label": label, "score": score, "reason": reason}
+
+    def explain_sentiment(self, code: str) -> Dict[str, Any]:
+        """Alias for analyze(), kept for clarity and backwards compatibility."""
+        return self.analyze(code)

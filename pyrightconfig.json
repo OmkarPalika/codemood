@@ -1,0 +1,4 @@
+{
+  "include": ["codemood"],
+  "extraPaths": ["codemood/_stubs"]
+}

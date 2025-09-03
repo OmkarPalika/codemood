@@ -32,5 +32,8 @@ dependencies = [
 Homepage = "https://github.com/OmkarPalika/codemood"
 Issues = "https://github.com/OmkarPalika/codemood/issues"
 
+[tool.pylance]
+stubPath = "codemood/_stubs"
+
 [tool.setuptools.packages.find]
 where = ["."]
