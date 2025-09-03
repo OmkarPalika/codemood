@@ -1,4 +1,6 @@
 {
   "include": ["codemood"],
-  "extraPaths": ["codemood/_stubs"]
+  "extraPaths": ["codemood/_stubs"],
+  "typeCheckingMode": "strict",
+  "stubPath": "./codemood/_stubs"
 }
