@@ -17,7 +17,7 @@ Example
 >>> reset_analyzers()
 """
 
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 from .code_mood_analyzer import CodeMoodAnalyzer
 from .unified_analyzer import UnifiedCodeAnalyzer, ComprehensiveAnalysis
 from .advanced_analyzer import AdvancedCodeAnalyzer, CodeMood
@@ -105,7 +105,7 @@ def analyze_sentiment_advanced(snippet: str) -> AdvancedSentiment:
         Detailed sentiment analysis with emotional tone and reasoning.
     """
     # Try custom model first
-    custom_result = model_loader.get_custom_model_prediction(snippet)
+    custom_result: Optional[Dict[str, Any]] = model_loader.get_custom_model_prediction(snippet)
     
     # Always use rule-based for detailed analysis
     engine = AdvancedSentimentEngine()

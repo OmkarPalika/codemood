@@ -34,14 +34,14 @@ class CustomModelLoader:
         try:
             # Assuming sklearn-style model
             if hasattr(self.model, 'predict'):
-                prediction = self.model.predict([code])[0]
-                confidence = getattr(
+                prediction = self.model.predict([code])[0]  # type: ignore
+                confidence: float = getattr(  # type: ignore
                     self.model, 'predict_proba',
-                    lambda x: [[0.5, 0.5]])([code])[0].max()
+                    lambda x: [[0.5, 0.5]])([code])[0].max()  # type: ignore
 
                 return {
                     'label': 'POSITIVE' if prediction == 1 else 'NEGATIVE',
-                    'score': confidence,
+                    'score': float(confidence),  # type: ignore
                     'source': 'custom_model'
                 }
         except Exception as e:
@@ -57,6 +57,7 @@ class CustomModelLoader:
 # Global instance
 _custom_model = CustomModelLoader()
 
-def get_custom_model_prediction(code: str):
+
+def get_custom_model_prediction(code: str) -> Optional[Dict[str, Any]]:
     """Public interface to get custom model prediction."""
     return _custom_model.predict(code)
