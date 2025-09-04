@@ -1,5 +1,5 @@
 import re
-from typing import List
+from typing import List, Dict, Any
 from dataclasses import dataclass
 from enum import Enum
 
@@ -22,7 +22,7 @@ class SecurityIssue:
 
 class SecurityAnalyzer:
     def __init__(self):
-        self.patterns = {
+        self.patterns: Dict[str, Dict[str, Any]] = {
             "sql_injection": {
                 "pattern": r'(execute|query|cursor\.execute)\s*\(\s*["\'].*%.*["\']',
                 "severity": SecuritySeverity.HIGH,
@@ -30,7 +30,8 @@ class SecurityAnalyzer:
                 "suggestion": "Use parameterized queries",
             },
             "hardcoded_secrets": {
-                "pattern": r'(password|secret|key|token)\s*=\s*["\'][^"\']{8,}["\']',
+                "pattern": r"(password|secret|key|token)\s*=\s*"
+                r'["\'][^"\']{8,}["\']',
                 "severity": SecuritySeverity.CRITICAL,
                 "description": "Hardcoded credentials detected",
                 "suggestion": "Use environment variables or secure vaults",
@@ -42,7 +43,8 @@ class SecurityAnalyzer:
                 "suggestion": "Avoid eval() or use ast.literal_eval()",
             },
             "shell_injection": {
-                "pattern": r"(os\.system|subprocess\.call|subprocess\.run).*shell\s*=\s*True",
+                "pattern": r"(os\.system|subprocess\.call|subprocess\.run).*"
+                r"shell\s*=\s*True",
                 "severity": SecuritySeverity.HIGH,
                 "description": "Shell injection risk",
                 "suggestion": "Avoid shell=True or sanitize inputs",
@@ -56,7 +58,7 @@ class SecurityAnalyzer:
         }
 
     def analyze(self, code: str) -> List[SecurityIssue]:
-        issues = []
+        issues: List[SecurityIssue] = []
         lines = code.split("\n")
 
         for line_num, line in enumerate(lines, 1):
