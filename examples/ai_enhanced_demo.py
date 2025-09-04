@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
-AI-Enhanced Analysis Demo
-Requires: pip install openai transformers (optional)
-Set: OPENAI_API_KEY environment variable
+Comprehensive Analysis Demo
+Demonstrates all codemood features including sentiment, security, and performance.
 """
 
-from codemood import analyze_with_ai, analyze_sentiment_advanced
+from codemood import analyze_sentiment_advanced, analyze_comprehensive, get_optimization_suggestions
 
 # Test code with optimization opportunities
 test_code = '''
@@ -23,35 +22,35 @@ for item in ["a", "b", "c"]:
     output += item
 '''
 
-print("=== STANDARD ADVANCED ANALYSIS ===")
-standard_result = analyze_sentiment_advanced(test_code)
-print(f"Score: {standard_result.overall_score:.2f}")
-print(f"Tone: {standard_result.emotional_tone}")
-print(f"Features: {len(standard_result.features)}")
+print("=== SENTIMENT ANALYSIS ===")
+sentiment_result = analyze_sentiment_advanced(test_code)
+print(f"Score: {sentiment_result.overall_score:.2f}")
+print(f"Tone: {sentiment_result.emotional_tone}")
+print(f"Confidence: {sentiment_result.confidence:.2f}")
+print("Reasoning:")
+for reason in sentiment_result.reasoning[:3]:
+    print(f"  • {reason}")
 
-print("\n=== AI-ENHANCED ANALYSIS ===")
-try:
-    ai_result = analyze_with_ai(test_code)
-    
-    print(f"Base Score: {ai_result.sentiment.overall_score:.2f}")
-    print(f"AI Confidence Boost: +{ai_result.confidence_boost:.2f}")
-    print(f"Natural Explanation: {ai_result.natural_explanation}")
-    
-    print(f"\nOptimization Issues: {len(ai_result.optimizations)}")
-    
-    if ai_result.ai_generated_fixes:
-        print("\n=== AI-GENERATED FIXES ===")
-        for line, fix in ai_result.ai_generated_fixes.items():
-            print(f"{line}: {fix}")
-    else:
-        print("\n(No AI fixes - requires OPENAI_API_KEY)")
-        
-except Exception as e:
-    print(f"AI enhancement not available: {e}")
-    print("Install: pip install openai transformers")
-    print("Set: OPENAI_API_KEY environment variable")
+print("\n=== COMPREHENSIVE ANALYSIS ===")
+comp_result = analyze_comprehensive(test_code)
+print(f"Overall Score: {comp_result.overall_score:.2f}")
+print(f"Security Score: {comp_result.security_score:.1f}/100")
+print(f"Performance Score: {comp_result.performance_score:.1f}/100")
+print(f"Security Issues: {len(comp_result.security_issues)}")
+print(f"Performance Issues: {len(comp_result.performance_issues)}")
 
-print("\n=== COMPARISON ===")
-print("Standard: Rule-based pattern matching")
-print("AI-Enhanced: + Code generation + Natural language + Confidence boosting")
-print("Best of both: Reliable rules + AI creativity")
+print("\n=== OPTIMIZATION SUGGESTIONS ===")
+optimizations = get_optimization_suggestions(test_code)
+for opt in optimizations:
+    print(f"Issue: {opt.issue_type}")
+    print(f"  Fix: {opt.suggested_fix}")
+    print(f"  Impact: {opt.impact}")
+
+print("\n=== SUMMARY ===")
+print(f"Summary: {comp_result.summary}")
+
+print("\n=== CLI COMMANDS TO TRY ===")
+print("codemood --analyze examples/ai_enhanced_demo.py")
+print("codemood --version")
+print("codemood --check")
+print("codemood --info")

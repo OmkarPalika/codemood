@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Advanced Sentiment Analysis Demo
+Demonstrates codemood's advanced sentiment analysis and optimization features.
 """
 
 from codemood import analyze_sentiment_advanced, get_optimization_suggestions
@@ -25,7 +26,6 @@ with open('data.txt', 'r') as f:
 print("=== ELEGANT CODE SENTIMENT ===")
 sentiment = analyze_sentiment_advanced(elegant_code)
 print(f"Overall Score: {sentiment.overall_score:.2f}")
-print(f"Intensity: {sentiment.intensity.name}")
 print(f"Emotional Tone: {sentiment.emotional_tone}")
 print(f"Confidence: {sentiment.confidence:.2f}")
 print("Reasoning:")
@@ -64,7 +64,6 @@ f.close()
 print("\n=== PROBLEMATIC CODE SENTIMENT ===")
 sentiment = analyze_sentiment_advanced(problematic_code)
 print(f"Overall Score: {sentiment.overall_score:.2f}")
-print(f"Intensity: {sentiment.intensity.name}")
 print(f"Emotional Tone: {sentiment.emotional_tone}")
 print(f"Confidence: {sentiment.confidence:.2f}")
 print("Reasoning:")
@@ -74,11 +73,11 @@ for reason in sentiment.reasoning:
 print("\n=== OPTIMIZATION SUGGESTIONS ===")
 suggestions = get_optimization_suggestions(problematic_code)
 for suggestion in suggestions:
-    print(f"\nLine {suggestion.line_number}: {suggestion.issue_type}")
+    print(f"\nIssue: {suggestion.issue_type}")
     print(f"   Problem: {suggestion.explanation}")
     print(f"   Fix: {suggestion.suggested_fix}")
     print(f"   Impact: {suggestion.impact}")
-    if suggestion.example:
+    if hasattr(suggestion, 'example') and suggestion.example:
         print(f"   Example:\n{suggestion.example}")
 
 # Example 3: Mixed quality code
@@ -106,8 +105,11 @@ class DataProcessor:
 print("\n=== MIXED QUALITY CODE SENTIMENT ===")
 sentiment = analyze_sentiment_advanced(mixed_code)
 print(f"Overall Score: {sentiment.overall_score:.2f}")
-print(f"Intensity: {sentiment.intensity.name}")
 print(f"Emotional Tone: {sentiment.emotional_tone}")
-print("Feature Breakdown:")
-for feature, score in sentiment.features.items():
-    print(f"  • {feature}: {score:.2f}")
+print(f"Confidence: {sentiment.confidence:.2f}")
+
+print("\n=== CLI DEMO ===")
+print("Try these CLI commands:")
+print("  codemood --analyze examples/advanced_sentiment_demo.py")
+print("  codemood --version")
+print("  codemood --info")
