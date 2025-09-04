@@ -16,7 +16,7 @@ class CustomModelLoader:
 
         if model_file.exists():
             try:
-                with open(model_file, 'rb') as f:
+                with open(model_file, "rb") as f:
                     self.model = pickle.load(f)
                 print("✅ Custom model loaded successfully")
             except Exception as e:
@@ -33,16 +33,18 @@ class CustomModelLoader:
 
         try:
             # Assuming sklearn-style model
-            if hasattr(self.model, 'predict'):
+            if hasattr(self.model, "predict"):
                 prediction = self.model.predict([code])[0]  # type: ignore
                 confidence: float = getattr(  # type: ignore
-                    self.model, 'predict_proba',
-                    lambda x: [[0.5, 0.5]])([code])[0].max()  # type: ignore
+                    self.model, "predict_proba", lambda x: [[0.5, 0.5]]
+                )([code])[
+                    0
+                ].max()  # type: ignore
 
                 return {
-                    'label': 'POSITIVE' if prediction == 1 else 'NEGATIVE',
-                    'score': float(confidence),  # type: ignore
-                    'source': 'custom_model'
+                    "label": "POSITIVE" if prediction == 1 else "NEGATIVE",
+                    "score": float(confidence),  # type: ignore
+                    "source": "custom_model",
                 }
         except Exception as e:
             warnings.warn(f"Custom model prediction failed: {e}")

@@ -157,20 +157,17 @@ class AdvancedSentimentEngine:
                     analysis.reasoning.append("Contains very long functions")
 
                 # Docstrings are positive
-                if (
-                    node.body
-                    and isinstance(node.body[0], ast.Expr)
-                ):
+                if node.body and isinstance(node.body[0], ast.Expr):
                     try:
                         # Check for string constants (docstrings)
-                        is_string = (isinstance(node.body[0].value, ast.Constant)
-                                     and isinstance(node.body[0].value.value, str))
+                        is_string = isinstance(
+                            node.body[0].value, ast.Constant
+                        ) and isinstance(node.body[0].value.value, str)
                     except AttributeError:
                         # Fallback for older Python versions
-                        is_string = (hasattr(ast, 'Str')
-                                     and isinstance(node.body[0].value,
-                                                    getattr(ast, 'Str',
-                                                            type(None))))
+                        is_string = hasattr(ast, "Str") and isinstance(
+                            node.body[0].value, getattr(ast, "Str", type(None))
+                        )
 
                     if is_string:
                         analysis.score += 0.4
