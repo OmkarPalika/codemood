@@ -1,6 +1,6 @@
 import ast
 import re
-from typing import List
+from typing import List, Tuple
 from dataclasses import dataclass
 from enum import Enum
 
@@ -70,57 +70,63 @@ class AdvancedCodeAnalyzer:
             return self._analyze_generic(code)
 
     def _calculate_complexity(self, tree: ast.AST) -> ComplexityMetrics:
-        cyclomatic = 1
-        cognitive = 0
-        max_depth = 0
-        current_depth = 0
+        # Use a class to hold mutable state for Python 3.8 compatibility
+        class Metrics:
+            def __init__(self) -> None:
+                self.cyclomatic = 1
+                self.cognitive = 0
+                self.max_depth = 0
+                self.current_depth = 0
+
+        metrics = Metrics()
 
         class ComplexityVisitor(ast.NodeVisitor):
-            def visit_If(self, node):
-                nonlocal cyclomatic, cognitive, current_depth, max_depth
-                cyclomatic += 1
-                cognitive += 1 + current_depth
-                current_depth += 1
-                max_depth = max(max_depth, current_depth)
+            def visit_If(self, node: ast.If) -> None:
+                metrics.cyclomatic += 1
+                metrics.cognitive += 1 + metrics.current_depth
+                metrics.current_depth += 1
+                metrics.max_depth = max(metrics.max_depth, metrics.current_depth)
                 self.generic_visit(node)
-                current_depth -= 1
+                metrics.current_depth -= 1
 
-            def visit_For(self, node):
-                nonlocal cyclomatic, cognitive, current_depth, max_depth
-                cyclomatic += 1
-                cognitive += 1 + current_depth
-                current_depth += 1
-                max_depth = max(max_depth, current_depth)
+            def visit_For(self, node: ast.For) -> None:
+                metrics.cyclomatic += 1
+                metrics.cognitive += 1 + metrics.current_depth
+                metrics.current_depth += 1
+                metrics.max_depth = max(metrics.max_depth, metrics.current_depth)
                 self.generic_visit(node)
-                current_depth -= 1
+                metrics.current_depth -= 1
 
-            def visit_While(self, node):
-                nonlocal cyclomatic, cognitive, current_depth, max_depth
-                cyclomatic += 1
-                cognitive += 1 + current_depth
-                current_depth += 1
-                max_depth = max(max_depth, current_depth)
+            def visit_While(self, node: ast.While) -> None:
+                metrics.cyclomatic += 1
+                metrics.cognitive += 1 + metrics.current_depth
+                metrics.current_depth += 1
+                metrics.max_depth = max(metrics.max_depth, metrics.current_depth)
                 self.generic_visit(node)
-                current_depth -= 1
+                metrics.current_depth -= 1
 
         visitor = ComplexityVisitor()
         visitor.visit(tree)
 
-        lines = len([n for n in tree.body if n]) if hasattr(tree, "body") else 1
+        lines = 1
+        if hasattr(tree, "body") and hasattr(tree, "body"):
+            body = getattr(tree, "body", [])
+            if body:
+                lines = len([n for n in body if n])
 
         return ComplexityMetrics(
-            cyclomatic=cyclomatic,
-            cognitive=cognitive,
-            nesting_depth=max_depth,
+            cyclomatic=metrics.cyclomatic,
+            cognitive=metrics.cognitive,
+            nesting_depth=metrics.max_depth,
             lines_of_code=lines,
         )
 
     def _detect_code_smells(self, code: str, tree: ast.AST) -> List[str]:
-        smells = []
+        smells: List[str] = []
 
         # Long parameter lists
         class SmellVisitor(ast.NodeVisitor):
-            def visit_FunctionDef(self, node):
+            def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
                 if len(node.args.args) > 5:
                     smells.append("Long parameter list")
                 if len(node.body) > 20:
@@ -141,7 +147,7 @@ class AdvancedCodeAnalyzer:
 
     def _determine_mood(
         self, code: str, complexity: ComplexityMetrics, smells: List[str]
-    ) -> tuple:
+    ) -> Tuple[CodeMood, float, str]:
         scores = {mood: 0 for mood in CodeMood}
 
         # Pattern matching
@@ -166,7 +172,7 @@ class AdvancedCodeAnalyzer:
             scores[CodeMood.CONFIDENT] += 1
 
         # Determine primary mood
-        primary_mood = max(scores, key=scores.get)
+        primary_mood = max(scores.keys(), key=lambda k: scores[k])
         confidence = min(scores[primary_mood] / max(sum(scores.values()), 1), 1.0)
 
         explanation = self._generate_explanation(primary_mood, complexity, smells)
@@ -199,7 +205,7 @@ class AdvancedCodeAnalyzer:
     def _analyze_generic(self, code: str) -> AdvancedMoodResult:
         lines = len(code.split("\n"))
         complexity = ComplexityMetrics(1, 1, 1, lines)
-        smells = []
+        smells: List[str] = []
 
         if len(code) > 500:
             smells.append("Long code block")

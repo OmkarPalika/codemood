@@ -5,32 +5,34 @@
 [![License](https://img.shields.io/github/license/OmkarPalika/codemood.svg?color=yellow)](https://github.com/OmkarPalika/codemood/blob/main/LICENSE)
 [![Build](https://img.shields.io/github/actions/workflow/status/OmkarPalika/codemood/python-package.yml?branch=main)](https://github.com/OmkarPalika/codemood/actions)
 
-**Advanced code analysis platform that combines AI sentiment analysis with comprehensive code quality assessment.**
+**Advanced code analysis platform that combines AI sentiment analysis with comprehensive code quality assessment and custom model training.**
 
-Codemood provides multi-dimensional code analysis including mood detection, security vulnerability scanning, performance bottleneck identification, and code quality metrics. Built for developers who want actionable insights into their codebase.
+Codemood provides multi-dimensional code analysis including mood detection, security vulnerability scanning, performance bottleneck identification, optimization suggestions, and code quality metrics. Features custom model training pipeline and automatic fallback systems. Built for developers who want actionable insights into their codebase.
 
 ## Key Features
 
-### 🧠 **Multi-Dimensional Mood Analysis**
-- **6 distinct code moods**: Elegant, Chaotic, Optimistic, Anxious, Confident, Confused
-- **AST-based analysis** for deep code structure understanding
-- **Complexity metrics**: Cyclomatic, cognitive complexity, nesting depth
+### 🧠 **Advanced Sentiment Analysis**
+- **12 feature categories**: Elegant patterns, documentation, type hints, code smells
+- **AST-based analysis** for Python structure understanding
+- **Emotional tone detection**: 7 distinct emotional states from "Delighted" to "Distressed"
+- **Custom model training**: Train your own models with provided pipeline
+- **Automatic fallback**: Rule-based → Custom model → Hugging Face API
 
-### 🔒 **Security Vulnerability Detection**
-- **Pattern-based scanning** for common security issues
+### 🔧 **Optimization Engine**
+- **6 optimization categories**: Nested loops, string concatenation, linear searches
+- **Specific fix suggestions**: Working code examples for each issue
+- **Impact assessment**: High/Medium/Low priority classification
+- **Performance improvements**: O(n²) → O(n) optimizations
+
+### 🔒 **Security Analysis**
+- **5 vulnerability types**: SQL injection, hardcoded secrets, shell injection
 - **Severity classification**: Critical, High, Medium, Low
-- **Detects**: SQL injection, hardcoded secrets, shell injection, weak randomization
-
-### ⚡ **Performance Analysis**
-- **Anti-pattern detection**: Nested loops, inefficient string operations
-- **Complexity assessment**: O(n²) detection, linear search identification
-- **Actionable recommendations** for optimization
+- **Line-by-line detection** with remediation suggestions
 
 ### 📊 **Comprehensive Scoring**
-- **Quality Score**: Code maintainability and structure assessment
-- **Security Score**: Vulnerability risk evaluation
-- **Performance Score**: Efficiency and optimization analysis
-- **Overall Score**: Weighted combination of all metrics
+- **Multi-layered analysis**: Sentiment + Security + Performance + Quality
+- **Confidence scoring** with reasoning explanations
+- **Weighted metrics**: Balanced assessment across all dimensions
 
 ## Installation
 
@@ -40,35 +42,55 @@ pip install codemood
 
 ## Quick Start
 
-### Basic Sentiment Analysis
+### Advanced Sentiment Analysis
 ```python
-from codemood import analyze_code
-
-result = analyze_code("for i in range(10): print(i)")
-print(f"Mood: {result['label']}, Score: {result['score']:.2f}")
-# Output: Mood: POSITIVE, Score: 0.98
-```
-
-### Comprehensive Analysis
-```python
-from codemood import analyze_comprehensive
+from codemood import analyze_sentiment_advanced
 
 code = '''
-def process_data(items):
-    password = "admin123"  # Security issue
-    result = ""
-    for i in range(len(items)):
-        for j in range(len(items)):  # Performance issue
-            result += str(items[i] + items[j])
-    return result
+def fibonacci_generator(n: int):
+    """Generate fibonacci sequence up to n terms."""
+    a, b = 0, 1
+    for _ in range(n):
+        yield a
+        a, b = b, a + b
 '''
 
-analysis = analyze_comprehensive(code)
-print(f"Mood: {analysis.mood_analysis.primary_mood.value}")
-print(f"Overall Score: {analysis.overall_score:.2f}")
-print(f"Security Issues: {len(analysis.security_issues)}")
-print(f"Performance Issues: {len(analysis.performance_issues)}")
-print(f"Summary: {analysis.summary}")
+sentiment = analyze_sentiment_advanced(code)
+print(f"Overall Score: {sentiment.overall_score:.2f}")
+print(f"Emotional Tone: {sentiment.emotional_tone}")
+print(f"Confidence: {sentiment.confidence:.2f}")
+# Output: Score: 7.20, Tone: Delighted - This code sparks joy!
+```
+
+### Optimization Suggestions
+```python
+from codemood import get_optimization_suggestions
+
+problematic_code = '''
+result = []
+for i in range(len(items)):
+    for j in range(len(items)):  # Nested loops - O(n²)
+        if items[i] == items[j]:
+            result.append(items[i])
+'''
+
+suggestions = get_optimization_suggestions(problematic_code)
+for suggestion in suggestions:
+    print(f"Issue: {suggestion.issue_type}")
+    print(f"Fix: {suggestion.suggested_fix}")
+    print(f"Impact: {suggestion.impact}")
+# Output: Issue: nested_loops, Fix: Use set operations, Impact: High
+```
+
+### Custom Model Training
+```python
+# Train your own sentiment model
+cd model_training
+python model_trainer.py
+
+# Model automatically integrates with codemood
+from codemood import analyze_sentiment_advanced
+result = analyze_sentiment_advanced(code)  # Uses your custom model + rules
 ```
 
 ## Advanced Usage
@@ -117,8 +139,10 @@ export HF_TOKEN="your_hugging_face_token"
 ## API Reference
 
 ### Core Functions
-- `analyze_code(snippet, model)` - Basic sentiment analysis
+- `analyze_sentiment_advanced(snippet)` - Advanced sentiment with emotional tone
+- `get_optimization_suggestions(snippet)` - Specific code improvements
 - `analyze_comprehensive(snippet, language)` - Full analysis suite
+- `analyze_code(snippet, model)` - Basic Hugging Face sentiment
 - `reset_analyzers()` - Clear cached models
 
 ### Analysis Results
@@ -137,11 +161,13 @@ class ComprehensiveAnalysis:
 
 ## Use Cases
 
-- **Code Reviews**: Automated quality assessment and issue detection
-- **CI/CD Integration**: Quality gates and security scanning
-- **Developer Education**: Learning code quality principles
-- **Technical Debt Analysis**: Identifying areas for refactoring
-- **Security Audits**: Vulnerability detection and risk assessment
+- **Code Reviews**: Automated sentiment analysis with optimization suggestions
+- **Developer Education**: Learn from emotional feedback and specific improvements
+- **Performance Optimization**: Identify and fix O(n²) algorithms with examples
+- **Custom Model Training**: Build domain-specific code quality models
+- **CI/CD Integration**: Quality gates with detailed explanations
+- **Security Audits**: Vulnerability detection with remediation guidance
+- **Technical Debt Analysis**: Emotional understanding of code quality issues
 
 ## Contributing
 

@@ -68,15 +68,22 @@ class UnifiedCodeAnalyzer:
         )
 
     def _generate_summary(
-        self, mood: AdvancedMoodResult, security: List, performance: List, score: float
+        self,
+        mood: AdvancedMoodResult,
+        security: List[SecurityIssue],
+        performance: List[PerformanceIssue],
+        score: float,
     ) -> str:
         if score > 0.8:
             return f"Excellent code! {mood.primary_mood.value.title()} vibes"
         elif score > 0.6:
             total_issues = len(security + performance)
-            return f"Good {mood.primary_mood.value} code, {total_issues} issues"
+            return f"Good {mood.primary_mood.value} code, " f"{total_issues} issues"
         elif score > 0.4:
-            return f"Code needs attention - {len(security)} security & {len(performance)} perf issues"
+            return (
+                f"Code needs attention - {len(security)} security & "
+                f"{len(performance)} perf issues"
+            )
         else:
             return "Code requires significant improvement - critical issues detected"
 

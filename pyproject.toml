@@ -5,14 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "codemood"
 version = "0.2.0"
-description = "Advanced Code Mood Analyzer with security, performance, and quality analysis"
+description = "Advanced Code Mood Analyzer with sentiment analysis, optimization suggestions, custom model training, and comprehensive code quality assessment"
 readme = "README.md"
 requires-python = ">=3.8"
 license = { file = "LICENSE" }
 authors = [
     { name = "Omkar Palika", email = "palikaomkar.22.cse@anits.edu.in" }
 ]
-keywords = ["code", "sentiment", "analysis", "fun", "AI"]
+keywords = ["code", "sentiment", "analysis", "optimization", "AI", "machine-learning", "code-quality", "security", "performance"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
