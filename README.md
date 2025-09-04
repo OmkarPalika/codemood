@@ -40,6 +40,25 @@ Codemood provides multi-dimensional code analysis including mood detection, secu
 pip install codemood
 ```
 
+## CLI Commands
+
+```bash
+# Check current version
+codemood --version
+
+# Check for updates
+codemood --check
+
+# Update to latest version
+codemood --update
+
+# Show package information
+codemood --info
+
+# Analyze a code file
+codemood --analyze path/to/file.py
+```
+
 ## Quick Start
 
 ### Advanced Sentiment Analysis

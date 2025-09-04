@@ -27,6 +27,9 @@ from .sentiment_engine import AdvancedSentimentEngine, AdvancedSentiment
 from .optimization_engine import OptimizationEngine, OptimizationSuggestion
 from . import model_loader
 
+# Version
+__version__ = "0.2.0"
+
 # Cache of analyzers by model name
 _analyzers: Dict[str, CodeMoodAnalyzer] = {}
 _unified_analyzer = None
@@ -170,4 +173,5 @@ __all__ = [
     "AdvancedSentiment",
     "OptimizationSuggestion",
     "CodeMood",
+    "__version__",
 ]
