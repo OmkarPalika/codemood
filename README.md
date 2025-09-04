@@ -1,224 +1,161 @@
-# 🌀 Codemood
-
-> *“Because even code has feelings…”*
+# Codemood
 
 [![PyPI version](https://img.shields.io/pypi/v/codemood.svg?color=blue)](https://pypi.org/project/codemood/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/codemood.svg?color=green)](https://pypi.org/project/codemood/)
 [![License](https://img.shields.io/github/license/OmkarPalika/codemood.svg?color=yellow)](https://github.com/OmkarPalika/codemood/blob/main/LICENSE)
 [![Build](https://img.shields.io/github/actions/workflow/status/OmkarPalika/codemood/python-package.yml?branch=main)](https://github.com/OmkarPalika/codemood/actions)
-[![Made with ❤️](https://img.shields.io/badge/made%20with-%F0%9F%96%A4-red)](https://github.com/OmkarPalika/codemood)
 
-Codemood is a lighthearted Python package that **analyzes the “mood” of your code**.
-Under the hood, it uses AI sentiment analysis — but instead of just saying *positive/negative*, it explains *why* your code snippet made the model happy, sad, or confused.
+**Advanced code analysis platform that combines AI sentiment analysis with comprehensive code quality assessment.**
 
-Perfect for:<br>
-✅ Adding humor to coding sessions<br>
-✅ Live demos & hackathons<br>
-✅ Side projects that surprise developers with witty feedback
+Codemood provides multi-dimensional code analysis including mood detection, security vulnerability scanning, performance bottleneck identification, and code quality metrics. Built for developers who want actionable insights into their codebase.
 
----
+## Key Features
 
-## ✨ Features
+### 🧠 **Multi-Dimensional Mood Analysis**
+- **6 distinct code moods**: Elegant, Chaotic, Optimistic, Anxious, Confident, Confused
+- **AST-based analysis** for deep code structure understanding
+- **Complexity metrics**: Cyclomatic, cognitive complexity, nesting depth
 
-* 🚀 Works out-of-the-box (no setup needed).
-* 🧠 Uses Hugging Face Transformers locally if available.
-* ☁️ Falls back to Hugging Face API (if you provide `HF_TOKEN`).
-* 🎭 Funny explanations — not just *“Positive”*, but *“Model got happy because it saw print 🎉”*.
-* 🐍 Lightweight, pip-installable, hackathon-friendly.
+### 🔒 **Security Vulnerability Detection**
+- **Pattern-based scanning** for common security issues
+- **Severity classification**: Critical, High, Medium, Low
+- **Detects**: SQL injection, hardcoded secrets, shell injection, weak randomization
 
----
+### ⚡ **Performance Analysis**
+- **Anti-pattern detection**: Nested loops, inefficient string operations
+- **Complexity assessment**: O(n²) detection, linear search identification
+- **Actionable recommendations** for optimization
 
-## 📦 Installation
+### 📊 **Comprehensive Scoring**
+- **Quality Score**: Code maintainability and structure assessment
+- **Security Score**: Vulnerability risk evaluation
+- **Performance Score**: Efficiency and optimization analysis
+- **Overall Score**: Weighted combination of all metrics
 
-```bash
-pip install codemood
-```
-
----
-
-## ⚡ Quickstart
-
-```python
-from codemood import analyze_code
-
-snippet = "for i in range(10): print(i)"
-mood = analyze_code(snippet)
-
-print(mood)
-```
-
-**Output:**
-
-```python
-{
-  'label': 'POSITIVE',
-  'score': 0.98,
-  'reason': "Model got happy because it saw print 🎉"
-}
-```
-
----
-
-## 🎯 Advanced Usage
-
-```python
-from codemood import CodeMoodAnalyzer
-
-analyzer = CodeMoodAnalyzer()
-
-# Analyze a function
-code = """
-def greet(name):
-    print("Hello", name)
-"""
-print(analyzer.analyze(code))
-
-# Alias method (same result)
-print(analyzer.explain_sentiment(code))
-```
-
----
-
-## 🔑 Hugging Face API (Optional)
-
-By default, Codemood works offline with `transformers`.<br>If you want cloud inference, set your Hugging Face token:
-
-```bash
-export HF_TOKEN="your_hf_token_here"
-```
-
-No token? No worries → Codemood will gracefully skip cloud mode.
-
----
-
-## 🛠️ Roadmap
-
-* [ ] Add more “emotions” beyond positive/negative.
-* [ ] Language-specific code mood tuning (Python vs JS vs C++).
-* [ ] VS Code extension for live code mood popups.
-
----
-
-## 🤝 Contributing
-
-PRs are welcome! Fork the repo, create a branch, and send a PR with your funniest improvements.
-
----
-
-## 📜 License
-
-MIT — Free to use, remix, and make your code smile 😄
-
----
-
-🔥 With **Codemood**, your code reviews will never be boring again.
-
----
-A4-red)](https://github.com/OmkarPalika/codemood)
-
-Codemood is a lighthearted Python package that **analyzes the “mood” of your code**.
-Under the hood, it uses AI sentiment analysis — but instead of just saying *positive/negative*, it explains *why* your code snippet made the model happy, sad, or confused.
-
-Perfect for:<br>
-✅ Adding humor to coding sessions<br>
-✅ Live demos & hackathons<br>
-✅ Side projects that surprise developers with witty feedback
-
----
-
-## ✨ Features
-
-* 🚀 Works out-of-the-box (no setup needed).
-* 🧠 Uses Hugging Face Transformers locally if available.
-* ☁️ Falls back to Hugging Face API (if you provide `HF_TOKEN`).
-* 🎭 Funny explanations — not just *“Positive”*, but *“Model got happy because it saw print 🎉”*.
-* 🐍 Lightweight, pip-installable, hackathon-friendly.
-
----
-
-## 📦 Installation
+## Installation
 
 ```bash
 pip install codemood
 ```
 
----
+## Quick Start
 
-## ⚡ Quickstart
-
+### Basic Sentiment Analysis
 ```python
 from codemood import analyze_code
 
-snippet = "for i in range(10): print(i)"
-mood = analyze_code(snippet)
-
-print(mood)
+result = analyze_code("for i in range(10): print(i)")
+print(f"Mood: {result['label']}, Score: {result['score']:.2f}")
+# Output: Mood: POSITIVE, Score: 0.98
 ```
 
-**Output:**
-
+### Comprehensive Analysis
 ```python
-{
-  'label': 'POSITIVE',
-  'score': 0.98,
-  'reason': "Model got happy because it saw print 🎉"
-}
+from codemood import analyze_comprehensive
+
+code = '''
+def process_data(items):
+    password = "admin123"  # Security issue
+    result = ""
+    for i in range(len(items)):
+        for j in range(len(items)):  # Performance issue
+            result += str(items[i] + items[j])
+    return result
+'''
+
+analysis = analyze_comprehensive(code)
+print(f"Mood: {analysis.mood_analysis.primary_mood.value}")
+print(f"Overall Score: {analysis.overall_score:.2f}")
+print(f"Security Issues: {len(analysis.security_issues)}")
+print(f"Performance Issues: {len(analysis.performance_issues)}")
+print(f"Summary: {analysis.summary}")
 ```
 
----
+## Advanced Usage
 
-## 🎯 Advanced Usage
+### Individual Analyzers
+```python
+from codemood import (
+    AdvancedCodeAnalyzer,
+    SecurityAnalyzer,
+    PerformanceAnalyzer
+)
 
+# Specialized analysis
+security = SecurityAnalyzer()
+issues = security.analyze(code)
+
+performance = PerformanceAnalyzer()
+bottlenecks = performance.analyze(code)
+
+advanced = AdvancedCodeAnalyzer()
+mood_result = advanced.analyze(code)
+```
+
+### Custom Model Configuration
 ```python
 from codemood import CodeMoodAnalyzer
 
-analyzer = CodeMoodAnalyzer()
-
-# Analyze a function
-code = """
-def greet(name):
-    print("Hello", name)
-"""
-print(analyzer.analyze(code))
-
-# Alias method (same result)
-print(analyzer.explain_sentiment(code))
+# Use custom Hugging Face model
+analyzer = CodeMoodAnalyzer(model="your-custom-model")
+result = analyzer.analyze(code)
 ```
 
----
+## Configuration
 
-## 🔑 Hugging Face API (Optional)
-
-By default, Codemood works offline with `transformers`.<br>If you want cloud inference, set your Hugging Face token:
+### Hugging Face Integration
+Codemood works offline by default. For cloud inference:
 
 ```bash
-export HF_TOKEN="your_hf_token_here"
+export HF_TOKEN="your_hugging_face_token"
 ```
 
-No token? No worries → Codemood will gracefully skip cloud mode.
+### Language Support
+- **Python**: Full AST analysis with comprehensive metrics
+- **Other languages**: Pattern-based analysis with generic scoring
 
----
+## API Reference
 
-## 🛠️ Roadmap
+### Core Functions
+- `analyze_code(snippet, model)` - Basic sentiment analysis
+- `analyze_comprehensive(snippet, language)` - Full analysis suite
+- `reset_analyzers()` - Clear cached models
 
-* [ ] Add more “emotions” beyond positive/negative.
-* [ ] Language-specific code mood tuning (Python vs JS vs C++).
-* [ ] VS Code extension for live code mood popups.
+### Analysis Results
+```python
+@dataclass
+class ComprehensiveAnalysis:
+    mood_analysis: AdvancedMoodResult
+    security_issues: List[SecurityIssue]
+    performance_issues: List[PerformanceIssue]
+    security_score: float
+    performance_score: float
+    overall_score: float
+    sentiment: Dict[str, Any]
+    summary: str
+```
 
----
+## Use Cases
 
-## 🤝 Contributing
+- **Code Reviews**: Automated quality assessment and issue detection
+- **CI/CD Integration**: Quality gates and security scanning
+- **Developer Education**: Learning code quality principles
+- **Technical Debt Analysis**: Identifying areas for refactoring
+- **Security Audits**: Vulnerability detection and risk assessment
 
-PRs are welcome! Fork the repo, create a branch, and send a PR with your funniest improvements.
+## Contributing
 
----
+Contributions welcome! Please read our contributing guidelines and submit pull requests for improvements.
 
-## 📜 License
+## License
 
-MIT — Free to use, remix, and make your code smile 😄
+MIT License - see [LICENSE](LICENSE) file for details.
 
----
+## Roadmap
 
-🔥 With **Codemood**, your code reviews will never be boring again.
-
----
+- [ ] JavaScript/TypeScript AST support
+- [ ] Java bytecode analysis
+- [ ] C++ static analysis integration
+- [ ] Machine learning-based quality prediction
+- [ ] IDE plugins and extensions
+- [ ] Team analytics dashboard

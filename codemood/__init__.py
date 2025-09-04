@@ -19,9 +19,14 @@ Example
 
 from typing import Dict
 from .code_mood_analyzer import CodeMoodAnalyzer
+from .unified_analyzer import UnifiedCodeAnalyzer, ComprehensiveAnalysis
+from .advanced_analyzer import AdvancedCodeAnalyzer, CodeMood
+from .security_analyzer import SecurityAnalyzer
+from .performance_analyzer import PerformanceAnalyzer
 
 # Cache of analyzers by model name
 _analyzers: Dict[str, CodeMoodAnalyzer] = {}
+_unified_analyzer = None
 
 
 def _get_analyzer(model: str) -> CodeMoodAnalyzer:
@@ -57,6 +62,28 @@ def analyze_code(
     return analyzer.explain_sentiment(snippet)
 
 
+def analyze_comprehensive(snippet: str, language: str = "python") -> ComprehensiveAnalysis:
+    """
+    Perform comprehensive code analysis including mood, security, and performance.
+    
+    Parameters
+    ----------
+    snippet : str
+        The code snippet to analyze.
+    language : str, optional
+        Programming language (default = "python").
+        
+    Returns
+    -------
+    ComprehensiveAnalysis
+        Complete analysis results including mood, security, and performance metrics.
+    """
+    global _unified_analyzer
+    if _unified_analyzer is None:
+        _unified_analyzer = UnifiedCodeAnalyzer()
+    return _unified_analyzer.analyze_comprehensive(snippet, language)
+
+
 def reset_analyzers() -> None:
     """
     Clear the cached analyzers.
@@ -69,5 +96,12 @@ def reset_analyzers() -> None:
 __all__ = [
     "CodeMoodAnalyzer",
     "analyze_code",
+    "analyze_comprehensive",
     "reset_analyzers",
+    "UnifiedCodeAnalyzer",
+    "AdvancedCodeAnalyzer",
+    "SecurityAnalyzer",
+    "PerformanceAnalyzer",
+    "ComprehensiveAnalysis",
+    "CodeMood",
 ]

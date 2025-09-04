@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "codemood"
-version = "0.0.2"
-description = "A fun Code Mood Analyzer that assigns 'moods' to code snippets using AI"
+version = "0.2.0"
+description = "Advanced Code Mood Analyzer with security, performance, and quality analysis"
 readme = "README.md"
 requires-python = ">=3.8"
 license = { file = "LICENSE" }
@@ -27,11 +27,20 @@ dependencies = [
     "transformers>=4.40.0",
     "huggingface_hub>=0.23.0",
     "matplotlib",
+    "torch>=1.9.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/OmkarPalika/codemood"
 Issues = "https://github.com/OmkarPalika/codemood/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "flake8>=4.0.0",
+    "black>=22.0.0",
+    "mypy>=0.950"
+]
 
 [tool.pylance]
 stubPath = "codemood/_stubs"
