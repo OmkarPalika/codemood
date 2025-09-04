@@ -78,7 +78,7 @@ sentiment = analyze_sentiment_advanced(code)
 print(f"Overall Score: {sentiment.overall_score:.2f}")
 print(f"Emotional Tone: {sentiment.emotional_tone}")
 print(f"Confidence: {sentiment.confidence:.2f}")
-# Output: Score: 7.20, Tone: Delighted - This code sparks joy!
+# Output: Score: 4.30, Tone: Delighted - This code sparks joy!
 ```
 
 ### Optimization Suggestions
@@ -98,7 +98,7 @@ for suggestion in suggestions:
     print(f"Issue: {suggestion.issue_type}")
     print(f"Fix: {suggestion.suggested_fix}")
     print(f"Impact: {suggestion.impact}")
-# Output: Issue: nested_loops, Fix: Use set operations, Impact: High
+# Output: Issue: nested_loops, Fix: Use list comprehension or vectorized operations, Impact: High - Can improve from O(n²) to O(n)
 ```
 
 ### Custom Model Training
@@ -125,12 +125,24 @@ from codemood import (
 # Specialized analysis
 security = SecurityAnalyzer()
 issues = security.analyze(code)
+print("Security Issues:", issues)  # Output: []
 
 performance = PerformanceAnalyzer()
 bottlenecks = performance.analyze(code)
+print("Performance Bottlenecks:", bottlenecks)  # Output: []
 
 advanced = AdvancedCodeAnalyzer()
 mood_result = advanced.analyze(code)
+print("\nAdvanced Code Analysis:")
+print(f"  Primary Mood: {mood_result.primary_mood.value}")  # elegant
+print(f"  Confidence: {mood_result.confidence:.2f}")  # 0.67
+print(f"  Complexity - Cyclomatic: {mood_result.complexity.cyclomatic}")  # 2
+print(f"  Complexity - Cognitive: {mood_result.complexity.cognitive}")  # 1
+print(f"  Complexity - Nesting Depth: {mood_result.complexity.nesting_depth}")  # 1
+print(f"  Complexity - Lines of Code: {mood_result.complexity.lines_of_code}")  # 1
+print(f"  Code Smells: {mood_result.code_smells}")  # []
+print(f"  Quality Score: {mood_result.quality_score:.2f}")  # 0.90
+print(f"  Explanation: {mood_result.explanation}")  # Code flows with 2 complexity
 ```
 
 ### Custom Model Configuration
