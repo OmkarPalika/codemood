@@ -105,19 +105,20 @@ def analyze_sentiment_advanced(snippet: str) -> AdvancedSentiment:
         Detailed sentiment analysis with emotional tone and reasoning.
     """
     # Try custom model first
-    custom_result: Optional[Dict[str, Any]] = model_loader.get_custom_model_prediction(snippet)
-    
+    custom_result: Optional[Dict[str, Any]] = (
+        model_loader.get_custom_model_prediction(snippet)
+    )
+
     # Always use rule-based for detailed analysis
     engine = AdvancedSentimentEngine()
     rule_result = engine.analyze_sentiment(snippet)
-    
     # Enhance with custom model if available
     if custom_result:
         # Boost confidence if custom model agrees
-        if ((custom_result['label'] == 'POSITIVE' and
-             rule_result.overall_score > 0) or
-            (custom_result['label'] == 'NEGATIVE' and
-             rule_result.overall_score < 0)):
+        if ((custom_result['label'] == 'POSITIVE'
+             and rule_result.overall_score > 0)
+            or (custom_result['label'] == 'NEGATIVE'
+                and rule_result.overall_score < 0)):
             rule_result.confidence = min(rule_result.confidence + 0.2, 1.0)
             rule_result.reasoning.append(
                 f"Custom model confirms: {custom_result['label']}")

@@ -1,11 +1,12 @@
-import torch
-import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
-from transformers import AutoTokenizer, AutoModel, Trainer, TrainingArguments
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score
+# type: ignore
+import torch  # type: ignore
+import torch.nn as nn  # type: ignore
+from torch.utils.data import Dataset, DataLoader  # type: ignore
+from transformers import AutoTokenizer, AutoModel, Trainer, TrainingArguments  # type: ignore
+import pandas as pd  # type: ignore
+import numpy as np  # type: ignore
+from sklearn.model_selection import train_test_split  # type: ignore
+from sklearn.metrics import accuracy_score, f1_score  # type: ignore
 import json
 
 
@@ -206,6 +207,20 @@ if __name__ == "__main__":
     sample_labels = [1, 0]  # positive, negative
     
     lightweight.train(sample_codes, sample_labels)
+    
+    # Save model for automatic loading
+    import pickle
+    from pathlib import Path
+    
+    models_dir = Path(__file__).parent.parent / "codemood" / "models"
+    models_dir.mkdir(exist_ok=True)
+    
+    model_path = models_dir / "code_sentiment.pkl"
+    with open(model_path, 'wb') as f:
+        pickle.dump(lightweight, f)
+    
+    print(f"✅ Model saved to {model_path}")
+    print("🔄 Restart Python to load the new model")
     
     # Test prediction
     result = lightweight.predict("def elegant_code(): pass")
