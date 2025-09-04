@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.0] - 2024-01-XX
+## [0.2.0] - 2025-09-04
 
 ### Added
 - **Multi-dimensional mood analysis** with 6 distinct code moods (Elegant, Chaotic, Optimistic, Anxious, Confident, Confused)

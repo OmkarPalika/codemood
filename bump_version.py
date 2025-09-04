@@ -4,7 +4,7 @@
 import re
 import sys
 
-def bump_version(bump_type="patch"):
+def bump_version(bump_type: str = "patch"):
     """Bump version in pyproject.toml"""
     with open("pyproject.toml", "r") as f:
         content = f.read()

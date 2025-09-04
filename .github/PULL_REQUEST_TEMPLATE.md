@@ -8,9 +8,11 @@ Brief description of the changes in this PR.
 - [ ] Documentation update
 
 ## Testing
-- [ ] Tests pass locally
+- [ ] Tests pass locally (`pytest tests/ -v`)
 - [ ] Added tests for new functionality
+- [ ] Code coverage maintained or improved
 - [ ] Updated documentation if needed
+- [ ] Tested on Python 3.8+ if applicable
 
 ## Checklist
 - [ ] My code follows the style guidelines of this project

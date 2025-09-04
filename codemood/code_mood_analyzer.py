@@ -18,9 +18,7 @@ except ImportError:
 class CodeMoodAnalyzer:
     def __init__(
         self,
-        model: str = (
-            "distilbert/distilbert-base-uncased-finetuned-sst-2-english"
-        ),
+        model: str = ("distilbert/distilbert-base-uncased-finetuned-sst-2-english"),
     ):
         self.model = model
         self.local_model: Any = None

@@ -17,6 +17,12 @@ A clear and concise description of any alternative solutions or features you've 
 
 **Use case**
 Describe how this feature would be used and who would benefit from it.
+- [ ] Code review automation
+- [ ] CI/CD integration
+- [ ] Developer education
+- [ ] Security analysis
+- [ ] Performance optimization
+- [ ] Other: ___________
 
 **Additional context**
 Add any other context or screenshots about the feature request here.

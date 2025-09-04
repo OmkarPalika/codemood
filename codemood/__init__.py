@@ -62,17 +62,19 @@ def analyze_code(
     return analyzer.explain_sentiment(snippet)
 
 
-def analyze_comprehensive(snippet: str, language: str = "python") -> ComprehensiveAnalysis:
+def analyze_comprehensive(
+    snippet: str, language: str = "python"
+) -> ComprehensiveAnalysis:
     """
     Perform comprehensive code analysis including mood, security, and performance.
-    
+
     Parameters
     ----------
     snippet : str
         The code snippet to analyze.
     language : str, optional
         Programming language (default = "python").
-        
+
     Returns
     -------
     ComprehensiveAnalysis

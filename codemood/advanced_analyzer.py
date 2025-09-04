@@ -1,6 +1,6 @@
 import ast
 import re
-from typing import Dict, Any, List, Optional
+from typing import List
 from dataclasses import dataclass
 from enum import Enum
 
@@ -35,11 +35,11 @@ class AdvancedMoodResult:
 class AdvancedCodeAnalyzer:
     def __init__(self):
         self.patterns = {
-            'elegant': [r'\blist\s*comprehension\b', r'\bwith\s+\w+', r'\byield\b'],
-            'chaotic': [r'goto', r'global\s+\w+', r'exec\s*\('],
-            'anxious': [r'try\s*:', r'except', r'raise', r'assert'],
-            'optimistic': [r'print\s*\(', r'return\s+True', r'success'],
-            'confused': [r'TODO', r'FIXME', r'XXX', r'pass\s*$']
+            "elegant": [r"\blist\s*comprehension\b", r"\bwith\s+\w+", r"\byield\b"],
+            "chaotic": [r"goto", r"global\s+\w+", r"exec\s*\("],
+            "anxious": [r"try\s*:", r"except", r"raise", r"assert"],
+            "optimistic": [r"print\s*\(", r"return\s+True", r"success"],
+            "confused": [r"TODO", r"FIXME", r"XXX", r"pass\s*$"],
         }
 
     def analyze(self, code: str, language: str = "python") -> AdvancedMoodResult:
@@ -53,16 +53,18 @@ class AdvancedCodeAnalyzer:
             tree = ast.parse(code)
             complexity = self._calculate_complexity(tree)
             smells = self._detect_code_smells(code, tree)
-            mood, confidence, explanation = self._determine_mood(code, complexity, smells)
+            mood, confidence, explanation = self._determine_mood(
+                code, complexity, smells
+            )
             quality = self._calculate_quality_score(complexity, smells)
-            
+
             return AdvancedMoodResult(
                 primary_mood=mood,
                 confidence=confidence,
                 complexity=complexity,
                 code_smells=smells,
                 quality_score=quality,
-                explanation=explanation
+                explanation=explanation,
             )
         except SyntaxError:
             return self._analyze_generic(code)
@@ -72,7 +74,7 @@ class AdvancedCodeAnalyzer:
         cognitive = 0
         max_depth = 0
         current_depth = 0
-        
+
         class ComplexityVisitor(ast.NodeVisitor):
             def visit_If(self, node):
                 nonlocal cyclomatic, cognitive, current_depth, max_depth
@@ -103,19 +105,19 @@ class AdvancedCodeAnalyzer:
 
         visitor = ComplexityVisitor()
         visitor.visit(tree)
-        
-        lines = len([l for l in tree.body if l]) if hasattr(tree, 'body') else 1
-        
+
+        lines = len([n for n in tree.body if n]) if hasattr(tree, "body") else 1
+
         return ComplexityMetrics(
             cyclomatic=cyclomatic,
             cognitive=cognitive,
             nesting_depth=max_depth,
-            lines_of_code=lines
+            lines_of_code=lines,
         )
 
     def _detect_code_smells(self, code: str, tree: ast.AST) -> List[str]:
         smells = []
-        
+
         # Long parameter lists
         class SmellVisitor(ast.NodeVisitor):
             def visit_FunctionDef(self, node):
@@ -126,20 +128,22 @@ class AdvancedCodeAnalyzer:
 
         visitor = SmellVisitor()
         visitor.visit(tree)
-        
+
         # Magic numbers
-        if re.search(r'\b(?!0|1)\d{2,}\b', code):
+        if re.search(r"\b(?!0|1)\d{2,}\b", code):
             smells.append("Magic numbers")
-            
+
         # Nested loops
-        if code.count('for') > 1 and 'for' in code:
+        if code.count("for") > 1 and "for" in code:
             smells.append("Nested loops")
-            
+
         return smells
 
-    def _determine_mood(self, code: str, complexity: ComplexityMetrics, smells: List[str]) -> tuple:
+    def _determine_mood(
+        self, code: str, complexity: ComplexityMetrics, smells: List[str]
+    ) -> tuple:
         scores = {mood: 0 for mood in CodeMood}
-        
+
         # Pattern matching
         for mood_name, patterns in self.patterns.items():
             for pattern in patterns:
@@ -164,23 +168,27 @@ class AdvancedCodeAnalyzer:
         # Determine primary mood
         primary_mood = max(scores, key=scores.get)
         confidence = min(scores[primary_mood] / max(sum(scores.values()), 1), 1.0)
-        
+
         explanation = self._generate_explanation(primary_mood, complexity, smells)
-        
+
         return primary_mood, confidence, explanation
 
-    def _generate_explanation(self, mood: CodeMood, complexity: ComplexityMetrics, smells: List[str]) -> str:
+    def _generate_explanation(
+        self, mood: CodeMood, complexity: ComplexityMetrics, smells: List[str]
+    ) -> str:
         explanations = {
-            CodeMood.ELEGANT: f"Code flows beautifully with {complexity.cyclomatic} complexity",
-            CodeMood.CHAOTIC: f"Code feels scattered with {len(smells)} issues detected",
+            CodeMood.ELEGANT: f"Code flows with {complexity.cyclomatic} complexity",
+            CodeMood.CHAOTIC: f"Code scattered with {len(smells)} issues",
             CodeMood.OPTIMISTIC: "Code radiates positivity and success",
-            CodeMood.ANXIOUS: f"Code seems worried with {len(smells)} potential problems",
+            CodeMood.ANXIOUS: f"Code worried with {len(smells)} problems",
             CodeMood.CONFIDENT: "Code stands tall and proud",
-            CodeMood.CONFUSED: f"Code is lost in {complexity.nesting_depth} levels of nesting"
+            CodeMood.CONFUSED: f"Code lost in {complexity.nesting_depth} levels",
         }
         return explanations.get(mood, "Code has mysterious vibes")
 
-    def _calculate_quality_score(self, complexity: ComplexityMetrics, smells: List[str]) -> float:
+    def _calculate_quality_score(
+        self, complexity: ComplexityMetrics, smells: List[str]
+    ) -> float:
         score = 100.0
         score -= min(complexity.cyclomatic * 2, 30)
         score -= min(complexity.cognitive * 1.5, 25)
@@ -189,22 +197,22 @@ class AdvancedCodeAnalyzer:
         return max(score, 0.0) / 100.0
 
     def _analyze_generic(self, code: str) -> AdvancedMoodResult:
-        lines = len(code.split('\n'))
+        lines = len(code.split("\n"))
         complexity = ComplexityMetrics(1, 1, 1, lines)
         smells = []
-        
+
         if len(code) > 500:
             smells.append("Long code block")
-        
+
         mood = CodeMood.CONFUSED
         confidence = 0.5
         explanation = "Generic analysis - language not fully supported 🤷"
-        
+
         return AdvancedMoodResult(
             primary_mood=mood,
             confidence=confidence,
             complexity=complexity,
             code_smells=smells,
             quality_score=0.7,
-            explanation=explanation
+            explanation=explanation,
         )

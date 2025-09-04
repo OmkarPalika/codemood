@@ -21,10 +21,10 @@ Steps to reproduce the behavior:
 ```
 
 **Environment**
-- OS: [e.g. Windows, macOS, Linux]
-- Python version: [e.g. 3.9.0]
+- OS: [e.g. Windows 11, macOS 14, Ubuntu 22.04]
+- Python version: [e.g. 3.9.0, 3.10.0, 3.11.0]
 - Codemood version: [e.g. 0.2.0]
-- Dependencies: [any relevant package versions]
+- Dependencies: [transformers, torch versions if relevant]
 
 **Error Output**
 ```

@@ -49,9 +49,15 @@ git checkout -b feature/your-feature-name
 
 3. **Test your changes**
 ```bash
-pytest tests/
-flake8 codemood
+# Run tests
+pytest tests/ -v
+
+# Check code style
+flake8 codemood --max-line-length=88 --ignore=E203,W503
 black --check codemood
+
+# Run comprehensive analysis example
+python examples/advanced_usage.py
 ```
 
 4. **Commit and push**
@@ -68,11 +74,20 @@ git push origin feature/your-feature-name
 
 ## Areas for Contribution
 
-- **New language support**: Add AST parsing for JavaScript, Java, C++
-- **Additional analyzers**: Security patterns, performance metrics
-- **Machine learning**: Improve mood classification accuracy
-- **Documentation**: Examples, tutorials, API docs
-- **Testing**: Edge cases, integration tests
+### High Priority
+- **JavaScript/TypeScript AST support**: Extend analysis beyond Python
+- **Java bytecode analysis**: Enterprise language support
+- **C++ static analysis**: Systems programming support
+
+### Medium Priority
+- **Enhanced security patterns**: More vulnerability detection
+- **Performance profiling**: Runtime analysis integration
+- **Machine learning models**: Custom code-trained sentiment models
+
+### Documentation & Testing
+- **API documentation**: Comprehensive examples and tutorials
+- **Integration guides**: CI/CD, IDE plugins
+- **Edge case testing**: Complex code scenarios
 
 ## Questions?
 

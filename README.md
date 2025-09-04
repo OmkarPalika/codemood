@@ -153,9 +153,18 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Roadmap
 
+### v0.3.0 - Language Expansion
 - [ ] JavaScript/TypeScript AST support
 - [ ] Java bytecode analysis
-- [ ] C++ static analysis integration
+- [ ] Go static analysis
+
+### v0.4.0 - Advanced Features
 - [ ] Machine learning-based quality prediction
-- [ ] IDE plugins and extensions
+- [ ] Real-time code analysis
+- [ ] Custom rule definitions
+
+### v1.0.0 - Production Ready
+- [ ] IDE plugins (VS Code, IntelliJ)
 - [ ] Team analytics dashboard
+- [ ] Enterprise integrations
+- [ ] Performance benchmarking
